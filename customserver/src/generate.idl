@@ -1,0 +1,36 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	dual,
+	uuid(A09AFC29-31EA-462a-9DF0-40A7D2D16E76)
+]
+interface IFileControl : IDispatch
+{
+	typedef [v1_enum] enum tagFILEMODE {
+		FM_READ = 0,
+		FM_WRITE = 1
+	} FILEMODE;
+	[id(1)] HRESULT CreateFile([in] BSTR bstrFileName, [in] FILEMODE filemode);
+	[id(2)] HRESULT ReadFile([in] DWORD dwLength, [out, retval] BSTR *lp);
+	[id(3)] HRESULT WriteFile([in] BSTR bstrData, [in] DWORD dwLength);
+	[id(4)] HRESULT CloseFile();
+	[id(5), propput] HRESULT FilePos([in] DWORD dwPos);
+}
+[
+	uuid(CFE6456E-8930-416d-B169-09B06AC9ECE2),
+	version(1.0),
+	helpstring("My type library")
+]
+library MyServerLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(79BDE8FF-CEE2-4c6d-A7B2-BED85A67A708)
+	]
+	coclass MyServer
+	{
+		[default] interface IFileControl;
+	}
+}
